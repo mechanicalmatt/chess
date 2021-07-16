@@ -14,6 +14,8 @@ api = tweepy.API(auth, wait_on_rate_limit=True, wait_on_rate_limit_notify=True)
 user = api.me()
 mentions = api.mentions_timeline()
 
+t0 = mentions[0]
+
 ####
 
 def playerProfile(username):
@@ -64,46 +66,20 @@ stats('mechmartian')
 
 ########
 
-def leaderboardDaily():
-    webUrl = urllib.request.urlopen('https://api.chess.com/pub/leaderboards')
-    data = webUrl.read()
-    a = ast.literal_eval(data.decode('utf-8'))
-    print(a.keys())
-    for i in a['daily']:
-        if i['rank'] < 7:
-            print(i['rank'], i['username'])
-
-# leaderboardDaily()
-
-####
-
 def playerGames(username):
     webUrl = urllib.request.urlopen('https://api.chess.com/pub/player/{}/games'.format(username))
     data = webUrl.read()
     a = ast.literal_eval(data.decode('utf-8'))
     print(a)
-    
-# playerGames('mechmartian')
-
-# def playerInfo(username):
-#     webUrl = urllib.request.urlopen('https://www.chess.com/stats/openings/{}'.format(username))
-#     data = webUrl.read()
-#     a = ast.literal_eval(data.decode('utf-8'))
-#     print(a)
-#
-# playerInfo('mechmartian')
-
-def reply(username):
-    api.update_status('@' + str(username) + playerStats)
-
-# get @ from a mentions
-for i in mentions:
-    a = i.__dict__['author'].__dict__['screen_name']
-    # print('@' + a)
 
 # list of tweet_id for mentions already replied to
 replied = []
-# get text from mentions and isolate chessUsername
+
+# tweet author
+def get_author():
+    tweet_author = mentions[0].__dict__['author'].__dict__['screen_name']
+    return tweet_author
+# chess username from tweet
 def get_username():
     chess_username = []
     t0 = mentions[0]
@@ -114,10 +90,10 @@ def get_username():
     return chess_username
 
 def send_reply():
+    author = get_author()
     user = get_username()
-    t0 = mentions[0]
     print(t0.__dict__['id'])
     if t0.__dict__['id'] in replied:
         print('replying...')
-    print('b', replied)
+    print('b', replied, author, user)
 send_reply()
