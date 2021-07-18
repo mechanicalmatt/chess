@@ -15,6 +15,11 @@ user = api.me()
 mentions = api.mentions_timeline()
 
 t0 = mentions[0]
+t0_id = t0.__dict__['id_str']
+
+# RETRIEVE TWEETS ALREADY REPLIED TO, AND WRITE WORKING REPLY INTO DOC
+
+file = "C:/Users/m_gray.DESKTOP-Q2TTLA7/Desktop/replied_to.txt"
 
 ####
 
@@ -36,11 +41,14 @@ def stats(username):
     webUrl = urllib.request.urlopen('https://api.chess.com/pub/player/{}/stats'.format(username))
     data = webUrl.read()
     a = ast.literal_eval(data.decode('utf-8'))
-    print(username + ' stats:')
-    print('Daily rating - ' + str(a['chess_daily']['last']['rating']))
-    print('Rapid rating - ' + str(a['chess_rapid']['last']['rating']))
-    print('Bullet rating - ' + str(a['chess_bullet']['last']['rating']))
-    print('Blitz rating - ' + str(a['chess_blitz']['last']['rating']))
+    b = username + ' stats:'
+    c = 'Daily rating - ' + str(a['chess_daily']['last']['rating'])
+    d = 'Rapid rating - ' + str(a['chess_rapid']['last']['rating'])
+    e = 'Bullet rating - ' + str(a['chess_bullet']['last']['rating']) 
+    f = 'Blitz rating - ' + str(a['chess_blitz']['last']['rating'])
+    return b, c, d, e, f
+for i in list(stats('mechmartian')):
+    print(i)
 def statsDaily(username):
     webUrl = urllib.request.urlopen('https://api.chess.com/pub/player/{}/stats'.format(username))
     data = webUrl.read()
@@ -87,13 +95,26 @@ def get_username():
     for i in t0.__dict__['text'].split(' '):
         if '!' in i:
             chess_username = i.strip('!')
-    return chess_username
+    return str(chess_username)
 
-def send_reply():
+####
+def do_it():
     author = get_author()
-    user = get_username()
-    print(t0.__dict__['id'])
-    if t0.__dict__['id'] in replied:
-        print('replying...')
-    print('b', replied, author, user)
-send_reply()
+    username = get_username()
+    replies = ""
+    player_stats = stats(username)
+    with open(file, 'r') as doc:
+        info = doc.readlines()
+    for i in info:
+        replies += str(i)
+    if t0_id not in replies:
+        # send tweet
+        with open(file, 'a') as doc:
+            print(t0_id, file=doc)
+    print(player_stats)
+    print(author)
+
+do_it()
+
+
+
