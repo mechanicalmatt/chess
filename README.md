@@ -30,6 +30,6 @@ make the usability as simple as possible - very simple formatting
 INTERACTIONS:
 
 how to tell if tweet has already been replied to:
->>  have a doc with every replied to tweet
+>  have a doc with every replied to tweet
 >>  open and read doc, see if most recent tweet is in this doc
->>>  if recent_id not in doc: break; else: fulfill request
+>>> if recent_id not in doc: break; else: fulfill request
