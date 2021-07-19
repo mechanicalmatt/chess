@@ -30,6 +30,6 @@ make the usability as simple as possible - very simple formatting
 INTERACTIONS:
 
 how to tell if tweet has already been replied to:
-**  send reply then like (in that order, in the same function)
-**  only like tweets that have been processed -
-**  "if favorited == True: ignore"
+**  have a doc with every replied to tweet
+**  open and read doc, see if most recent tweet is in this doc
+**  if recent_id not in doc: break; else: fulfill request
